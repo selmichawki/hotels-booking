@@ -1,12 +1,11 @@
 # hotels-dataset
 
-## Changing data solutions
-This document  contains the solutions for the changing activity. You can use these solutions to check your work and ensure that your code is correct or troubleshoot your code if it is returning errors. If you haven't completed the activity yet, we suggest you go back and finish it before reading the solutions.
 
-If you experience errors, remember that you can search the internet and the RStudio community for help:
-https://community.rstudio.com/#
 
-## Step 1: Load packages
+
+## Loading packages
+
+Installing packages 
 
 ```{r install packages}
 install.packages("tidyverse")
@@ -14,111 +13,68 @@ install.packages("skimr")
 install.packages("janitor")
 ```
 
-Once a package is installed, you can load it by running the `library()` function with the package name inside the parentheses:
+Once a package is installed, we load packages
 
-```{r load packages}
+```r 
 library(tidyverse)
 library(skimr)
 library(janitor)
 ```
 
-## Step 2: Import data
+## Importing data
 
-The data in this example is originally from the article Hotel Booking Demand Datasets (https://www.sciencedirect.com/science/article/pii/S2352340918315191), written by Nuno Antonio, Ana Almeida, and Luis Nunes for Data in Brief, Volume 22, February 2019.
-
-The data was downloaded and cleaned by Thomas Mock and Antoine Bichat for #TidyTuesday during the week of February 11th, 2020 (https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-11/readme.md).
+The data is originally from the article Hotel Booking Demand Datasets (https://www.sciencedirect.com/science/article/pii/S2352340918315191), written by Nuno Antonio, Ana Almeida, and Luis Nunes for Data in Brief, Volume 22, February 2019.
 
 You can learn more about the dataset here:
 https://www.kaggle.com/jessemostipak/hotel-booking-demand
 
-In the chunk below, you will use the `read_csv()` function to import data from a .csv in the project folder called "hotel_bookings.csv" and save it as a data frame called `hotel_bookings`:
-
+Creating a data set `hotel_bookings`
 ```{r load dataset}
 hotel_bookings <- read_csv("hotel_bookings.csv")
 ```
 
-## Step 3: Getting to know your data
+## Getting to know the data
 
-Like you have been doing in other examples, use the `head()` function to preview the columns and the first several rows of data by running the chunk below:
+We use the `head()` function to preview the columns and the first several rows of data.
 
 ```{r head function}
 head(hotel_bookings)
 ```
-### Practice Quiz Answers 
-
-1. How many columns are in this data set?
-A: 45
-B: 100
-C: 32
-D: 60
-Answer: C. There are 32 columns in this data set. The `head()` function returns a preview of the data set, including the first six rows of data and as many columns as will fit on the screen. At the bottom left of the table, it states that it is previewing 1-4 of 32 columns. 
-
-2. The 'arrival_date_month' variable is chr or character type data.  
-A: True
-B: False
-Answer: A. The â€˜arrival_date_monthâ€™ variable is chr or character type data. Underneath the column name in the preview table, there is a description of the data type for each column. 
-
-In addition to `head()` you can also use the `str()` and `glimpse()` functions to get summaries of each column in your data arranged horizontally. You can try these two functions by running the code chunks below:
+ Getting summaries of each column in data arranged horizontally.
 
 ```{r str function}
 str(hotel_bookings)
 ```
 
-You can see the different column names and some sample values to the right of the colon. 
-
 ```{r glimpse function}
 glimpse(hotel_bookings)
 ```
-
-You can also use `colnames()` to get the names of the columns in your data set. Run the code chunk below to get the column names:
 
 ```{r colnames function}
 colnames(hotel_bookings)
 ```
 
-## Manipulating your data
+## Manipulating data and visualization
 
-Let's say you want to arrange the data by most lead time to least lead time because you want to focus on bookings that were made far in advance. You decide you want to try using the `arrange()` function and run the following command: 
-
-```{r arrange function}
-arrange(hotel_bookings, lead_time)
-```
-
-`arrange()`  automatically orders by ascending order, and you need to specifically tell it when to order by descending order, like the below code chunk below:
+We arrange the data by most lead time to least lead time because.
 
 ```{r arrange function descending} 
 arrange(hotel_bookings, desc(lead_time))
 ```
-## Practice Quiz Answers
-
-What is the highest lead time for a hotel booking in this data set?
-A: 737
-B: 709
-C: 629
-D: 0
-
-Answer: A. The highest lead time for a hotel booking in this data set is 737 days. After using the arrange() function to sort the hotel_bookings by lead time in descending order, you will notice that 737 is the first row. That is over two years in advance!
-
-Notice that when you just run `arrange()` without saving your data to a new data frame, it does not alter the existing data frame. Check it out by running `head()` again to find out if the highest lead times are first: 
-
-```{r head function part two}
-head(hotel_bookings)
-```
-
-If you wanted to create a new data frame that had those changes saved, you would use the <- as written in the code chunk below to store the arranged data in a data frame named 'hotel_bookings_v2'
+We store this into new dataframe named 'hotel_bookings_v2'
 
 ```{r new dataframe}
 hotel_bookings_v2 <-
   arrange(hotel_bookings, desc(lead_time))
 ```
 
-Check out the new data frame: 
+Checking out the new data frame: 
 
 ```{r new dataframe part two}
 head(hotel_bookings_v2)
 ```
 
-You can also find out the maximum and minimum lead times without sorting the whole data set using the `arrange()` function. Try it out using the max() and min() functions below:
+We find out the maximum and minimum lead times.
 
 ```{r}
 max(hotel_bookings$lead_time)
@@ -127,131 +83,50 @@ max(hotel_bookings$lead_time)
 ```{r}
 min(hotel_bookings$lead_time)
 ```
-
-Remember, in this case, you need to specify which data set and which column using the $ symbol between their names. Try running the below to see what happens if you forget one of those pieces:
-
-```{r}
-min(lead_time)
-```
-
-This is a common error that R users encounter. 
-
-Now, let's say you just want to know what the average lead time for booking is because your boss asks you how early you should run promotions for hotel rooms. You can use the `mean()`function to answer that question:
+Getting the average of lead time 
 
 ```{r mean}
 mean(hotel_bookings$lead_time)
 ```
 
-You should get the same answer even if you use the v2 data set that included the `arrange()` function. 
 
-```{r mean part two}
-mean(hotel_bookings_v2$lead_time)
-```
-
-## Practice Quiz 
-
-What is the average lead time?
-A: 100
-B: 45
-C: 14
-D: 104.0114
-
-Answer: D. The average lead time is 104.0114 days. You were able to calculate this using the mean() function on the lead_time column in your data set. 
-
-You were able to report to your boss what the average lead time before booking is, but now they want to know what the average lead time before booking is for just city hotels. They want to focus the promotion they're running by targeting major cities.
-
-You know that your first step will be creating a new data set that only contains data about city hotels. You can do that using the `filter()` function, and name your new data frame 'hotel_bookings_city':
-
----
-title: "Lesson 2: GGPlot Solutions"
-output: html_document
----
-
-## You and ggplot solutions
-This document  contains the solutions for the you and ggplot activity. You can use these solutions to check your work and ensure that your code is correct or troubleshoot your code if it is returning errors. If you haven't completed the activity yet, we suggest you go back and finish it before reading the solutions.
-
-If you experience errors, remember that you can search the internet and the RStudio community for help:
-https://community.rstudio.com/#
-
-## Step 1: Import your data 
-
-The data in this example is originally from the article Hotel Booking Demand Datasets (https://www.sciencedirect.com/science/article/pii/S2352340918315191), written by Nuno Antonio, Ana Almeida, and Luis Nunes for Data in Brief, Volume 22, February 2019.
-
-The data was downloaded and cleaned by Thomas Mock and Antoine Bichat for #TidyTuesday during the week of February 11th, 2020 (https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-11/readme.md).
-
-You can learn more about the dataset here:
-https://www.kaggle.com/jessemostipak/hotel-booking-demand
-
-In the chunk below, you will use the `read_csv()` function to import data from a .csv in the project folder called "hotel_bookings.csv" and save it as a data frame called `hotel_bookings`:
-
-```{r load data}
-hotel_bookings <- read.csv("hotel_bookings.csv")
-```
-## Step 2: Look at a sample of your data
-
-Use the head() function to preview your data: 
-```{r examining your data}
-head(hotel_bookings)
-```
-
-You can also use colnames() to get the names of all the columns in your data set. Run the code chunk below to find out the column names in this data set:
-
-```{r look at column names}
-colnames(hotel_bookings)
-```
-
-## Step 3: Install and load the 'ggplot2' package
-
-If you haven't already installed and loaded the `ggplot2` package, you will need to do that before you can use the `ggplot()` function. 
-
-Run the code chunk below to install and load `ggplot2`. This may take a few minutes.
+Installing and load the 'ggplot2' package
+.
 
 ```{r loading and installing ggplot2, echo=FALSE, message=FALSE}
 install.packages('ggplot2')
 library(ggplot2)
 ```
 
-## Step 4: Begin creating a plot
-
-You can use `ggplot2` to determine if people with children book hotel rooms in advance. Try running the code below:
-
+We determine if people with children book hotel rooms in advance.
 ```{r creating a plot}
 ggplot(data = hotel_bookings) +
   geom_point(mapping = aes(x = lead_time, y = children))
 ```
 
-On the x-axis, the plot shows how far in advance a booking is made, with the bookings furthest to the right happening the most in advance. On the y-axis it shows how many children there are in a party.
-
-## Step 5: Try it on your own
-
-Try mapping 'stays_in_weekend_nights' on the x-axis and 'children' on the y-axis by filling out the remainder of the code below:
-
 ```{r}
 ggplot(data = hotel_bookings) +
  geom_point(mapping = aes(x = stays_in_weekend_nights, y = children))
 ```
-
-
-
-
+Creating new data set
 ```{r filter}
 hotel_bookings_city <- 
   filter(hotel_bookings, hotel_bookings$hotel=="City Hotel")
 ```
 
-Check out your new data set:
+Check out the new data set
 
 ```{r new dataset}
 head(hotel_bookings_city)
 ```
 
-You quickly check what the average lead time for this set of hotels is, just like you did for all of hotels before:
+Checking the average lead time for this set of hotels 
 
 ```{r average lead time city hotels}
 mean(hotel_bookings_city$lead_time)
 ```
 
-Now, your boss wants to know a lot more information about city hotels, including the maximum and minimum lead time. They are also interested in how they are different from resort hotels. You don't want to run each line of code over and over again, so you decide to use the `group_by()`and`summarize()` functions. You can also use the pipe operator to make your code easier to follow. You will store the new data set in a data frame named 'hotel_summary':
+Checking the mean, min and max lead time 
 
 ```{r group and summarize}
 hotel_summary <- 
@@ -262,198 +137,40 @@ hotel_summary <-
             max_lead_time=max(lead_time))
 ```
 
-Check out your new data set using head() again:
+Checking the new data set 
 
 ```{r}
 head(hotel_summary)
 ```
----
-title: "Lesson 3: Aesthetics Solutions"
-output: html_document
----
 
-## Aesthetics and visualizations activity solutions
-
-This document  contains the solutions for the aesthetics and visualizations activity. You can use these solutions to check your work and ensure that your code is correct or troubleshoot your code if it is returning errors. If you haven't completed the activity yet, we suggest you go back and finish it before reading the solutions.
-
-If you experience errors, remember that you can search the internet and the RStudio community for help:
-https://community.rstudio.com/#
-
-## Step 1: Import your data
-If you haven't exited out of RStudio since importing this data last time, you can skip these steps. Rerunning these code chunks won't affect your console if you want to run them just in case, though.  
-
-The data in this example is originally from the article Hotel Booking Demand Datasets (https://www.sciencedirect.com/science/article/pii/S2352340918315191), written by Nuno Antonio, Ana Almeida, and Luis Nunes for Data in Brief, Volume 22, February 2019.
-
-The data was downloaded and cleaned by Thomas Mock and Antoine Bichat for #TidyTuesday during the week of February 11th, 2020 (https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-11/readme.md).
-
-You can learn more about the dataset here:
-https://www.kaggle.com/jessemostipak/hotel-booking-demand
-
-Run the code below to read in the file 'hotel_bookings.csv' into a data frame:
-
-```{r}
-hotel_bookings <- read.csv("hotel_bookings.csv")
-```
-
-## Step 2: Refresh Your Memory
-
-By now, you are pretty familiar with this data set. But you can refresh your memory with the `head()` and `colnames()` functions. Run two code chunks below to get at a sample of the data and also preview all the column names:
-
-```{r look at data}
-head(hotel_bookings)
-```
-
-```{r look at column names}
-colnames(hotel_bookings)
-```
-
-## Step 3: Install and load the 'ggplot2' package (optional)
-
-Run the code chunk below to install and load `ggplot2` if you don't have it installed and loaded already. This may take a few minutes!
-
-```{r loading and installing ggplot2, echo=FALSE, message=FALSE}
-install.packages('ggplot2')
-library(ggplot2)
-```
-
-## Step 4: Making a Bar Chart
-
-Previously, you used `geom_point` to make a scatter plot comparing lead time and number of children. Now, you will use `geom_bar` to make a bar chart in this code chunk: 
-
-```{r example chart}
-ggplot(data = hotel_bookings) +
-  geom_bar(mapping = aes(x = distribution_channel))
-```
-
-## Practice quiz
-
-Use the bar chart you created to answer this question: what distribution type has the most number of bookings? Note your answer and respond in the Coursera platform.
-
-A: TA/TO
-B: Direct
-C: GDS
-D: Corporate
-Answer: A. The TA/TO distribution type has the most number of bookings.
-
-## Step 5: Diving deeper into bar charts
-
-After exploring your bar chart, your stakeholder has more questions. Now they want to know if the number of bookings for each distribution type is different depending on whether or not there was a deposit or what market segment they represent. 
-
-Try running the code below to answer the question about deposits. You will use 'fill=deposit_type' to accomplish this.
+Making a Bar Chart to know if the number of bookings for each distribution type is different depending on whether or not there was a deposit or what market segment they represent. 
 
 ```{r pressure, echo=FALSE}
 ggplot(data = hotel_bookings) +
   geom_bar(mapping = aes(x = distribution_channel, fill=deposit_type))
 ```
+Creating separate charts for each deposit type and market segment to understand the difference.
 
-Now try running the code below to answer the question about different market segments. You will use 'fill=market_segment' to accomplish this.
-
-```{r pressure, echo=FALSE}
-ggplot(data = hotel_bookings) +
-  geom_bar(mapping = aes(x = distribution_channel, fill=market_segment))
-```
-## Step 6: Facets galore
-
-After reviewing the new charts, your stakeholder asks you to create separate charts for each deposit type and market segment to help them understand the differences more clearly.
-
-Run the code chunk below to create a different chart for each deposit type:
 ```{r creating a plot}
 ggplot(data = hotel_bookings) +
   geom_bar(mapping = aes(x = distribution_channel)) +
   facet_wrap(~deposit_type)
 ```
-
-Run the code chunk below to create a different chart for each market segment:
+Creating a different chart for each market segment:
 ```{r creating a plot}
 ggplot(data = hotel_bookings) +
   geom_bar(mapping = aes(x = distribution_channel)) +
-  facet_wrap(~market_segment)
+  facet_grid(~market_segment)
 ```
 
-The `facet_grid` function does something similar. The main difference is that `facet_grid` will include plots even if they are empty. Run the code chunk below to check it out:
-
-```{r creating a plot}
-ggplot(data = hotel_bookings) +
-  geom_bar(mapping = aes(x = distribution_channel)) +
-  facet_grid(~deposit_type)
-```
-
-Now, you could put all of this in one chart and explore the differences by deposit type and market segment.
-
-Run the code chunk below to find out; notice how the ~ character is being used before the variables that the chart is being split by: 
-```{r creating a plot}
-ggplot(data = hotel_bookings) +
-  geom_bar(mapping = aes(x = distribution_channel)) +
-  facet_wrap(~deposit_type~market_segment)
-```
----
-title: "Lesson 3: Filters Solutions"
-output: html_document
----
-
-## Filters and facets solutions
-This document  contains the solutions for the filters and facets activity. You can use these solutions to check your work and ensure that your code is correct or troubleshoot your code if it is returning errors. If you haven't completed the activity yet, we suggest you go back and finish it before reading the solutions.
-
-If you experience errors, remember that you can search the internet and the RStudio community for help:
-https://community.rstudio.com/#
-
-## Step 1: Import your data
-
-The data in this example is originally from the article Hotel Booking Demand Datasets (https://www.sciencedirect.com/science/article/pii/S2352340918315191), written by Nuno Antonio, Ana Almeida, and Luis Nunes for Data in Brief, Volume 22, February 2019.
-
-The data was downloaded and cleaned by Thomas Mock and Antoine Bichat for #TidyTuesday during the week of February 11th, 2020 (https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-11/readme.md).
-
-You can learn more about the dataset here:
-https://www.kaggle.com/jessemostipak/hotel-booking-demand
-
-Run the code below to read in the file 'hotel_bookings.csv' into a data frame: 
-
-```{r}
-hotel_bookings <- read.csv("hotel_bookings.csv")
-```
-
-## Step 2: Refresh Your Memory
-
-By now, you are pretty familiar with this data set. But you can refresh your memory with the `head()` and `colnames()` functions. Run two code chunks below to get at a sample of the data and also preview all the column names:
-
-```{r look at data}
-head(hotel_bookings)
-```
-
-```{r look at column names}
-colnames(hotel_bookings)
-```
-
-## Step 3: Install and load the 'ggplot2' package (optional)
-
-If you haven't already installed and loaded the `ggplot2` package, you will need to do that before you can use the `ggplot()` function. You only have to do this once though, not every time you call `ggplot()`.
-
-You can also skip this step if you haven't closed your RStudio account since doing the last activity. If you aren't sure, you can run the code chunk and hit 'cancel' if the warning message pops up telling you that have already downloaded the `ggplot2` package.
-
-Run the code chunk below to install and load `ggplot2`. This may take a few minutes!
-
-```{r loading and installing ggplot2, echo=FALSE, message=FALSE}
-install.packages('ggplot2')
-library(ggplot2)
-```
-
-## Step 4: Making many different charts
-
-As a refresher, here's the scatter plot you created earlier.
-
-```{r creating a plot}
-ggplot(data = hotel_bookings) +
-  geom_point(mapping = aes(x = lead_time, y = children))
-```
-
-You decide to create a bar chart showing each hotel type and market segment. You use different colors to represent each market segment:
+Create a bar chart showing each hotel type and market segment.
 
 ```{r bar chart}
 ggplot(data = hotel_bookings) +
   geom_bar(mapping = aes(x = hotel, fill = market_segment))
 ```
 
-You decide to use the facet_wrap() function to create a separate plot for each market segment: 
+Creating a separate plot for each market segment: 
 
 ```{r faceting a plot}
 ggplot(data = hotel_bookings) +
@@ -461,18 +178,7 @@ ggplot(data = hotel_bookings) +
   facet_wrap(~market_segment)
 ```
 
-## Step 5: Filtering
-
-For the next step, you will need to have the `tidyverse` package installed and loaded. You may see a pop-up asking if you want to install; if that's the case, click 'Install.' This may take a few minutes!
-
-If you already have done this because you're using the`tidyverse` package on your own, you can skip this code chunk.
-
-```{r install and download tidyverse}
-install.packages('tidyverse')
-library(tidyverse)
-```
-
-Use the `filter()` function to create a data set that only includes the data you want: 
+Creating a data set `onlineta_city_hotels`
 
 ```{r filtering a dataset to just city hotels that are online TA}
 onlineta_city_hotels <- filter(hotel_bookings, 
@@ -480,15 +186,13 @@ onlineta_city_hotels <- filter(hotel_bookings,
                              hotel_bookings$market_segment=="Online TA"))
 ```
 
-You can use the`View`() function to check out your new data frame:
+Checking out the new data set 
 
 ```{r View}
 View(onlineta_city_hotels)
 ```
 
-You can use the pipe operator (%>%) to do this in steps! 
-
-You name this data frame `onlineta_city_hotels_v2`:
+Creating new data set `onlineta_city_hotels_v2`:
 
 ```{r filtering a dataset with the pipe}
 onlineta_city_hotels_v2 <- hotel_bookings %>%
@@ -496,83 +200,12 @@ onlineta_city_hotels_v2 <- hotel_bookings %>%
   filter(market_segment=="Online TA")
 ```
 
-This code chunk generates the same data frame by using the `View()` function:
+Checking out the new data set 
 
 ```{r view second dataframe}
 View(onlineta_city_hotels_v2)
 ```
-
-## Step 6: Use your new dataframe
-
-Using the code for your previous scatterplot, replace `variable_name` in the code chunk below with either `onlineta_city_hotels` or `onlineta_city_hotels_v2` to plot the data your stakeholder requested:
-
-```{r creating a plot part two}
-ggplot(data = onlineta_city_hotels) +
-  geom_point(mapping = aes(x = lead_time, y = children))
-```
-
----
-title: "Lesson 4: Annotations Solutions"
-output: html_document
----
-
-## Annotating and saving solutions
-
-This document  contains the solutions for the annotating and saving activity. You can use these solutions to check your work and ensure that your code is correct or troubleshoot your code if it is returning errors. If you haven't completed the activity yet, we suggest you go back and finish it before reading the solutions.
-
-If you experience errors, remember that you can search the internet and the RStudio community for help:
-https://community.rstudio.com/#
-
-## Step 1: Import your data
-
-The data in this example is originally from the article Hotel Booking Demand Datasets (https://www.sciencedirect.com/science/article/pii/S2352340918315191), written by Nuno Antonio, Ana Almeida, and Luis Nunes for Data in Brief, Volume 22, February 2019.
-
-The data was downloaded and cleaned by Thomas Mock and Antoine Bichat for #TidyTuesday during the week of February 11th, 2020 (https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-11/readme.md).
-
-You can learn more about the dataset here:
-https://www.kaggle.com/jessemostipak/hotel-booking-demand
-
-Run the code below to read in the file 'hotel_bookings.csv' into a data frame: 
-
-```{r}
-hotel_bookings <- read.csv("hotel_bookings.csv")
-```
-
-## Step 2: Refresh Your Memory
-
-By now, you are pretty familiar with this data set. But you can refresh your memory with the `head()` and `colnames()` functions. Run two code chunks below to get at a sample of the data and also preview all the column names:
-
-```{r look at data}
-head(hotel_bookings)
-```
-
-```{r look at column names}
-colnames(hotel_bookings)
-```
-
-## Step 3: Install and load the 'ggplot2' package (optional)
-
-If you haven't already installed and loaded the `ggplot2` package, you will need to do that before you can use the `ggplot()` function. You only have to do this once though, not every time you call `ggplot()`.
-
-You can also skip this step if you haven't closed your RStudio account since doing the last activity. If you aren't sure, you can run the code chunk and hit 'cancel' if the warning message pops up telling you that have already downloaded the `ggplot2` package.
-
-Run the code chunk below to install and load `ggplot2`. This may take a few minutes!
-
-```{r loading and installing ggplot2, echo=FALSE, message=FALSE}
-install.packages('ggplot2')
-library(ggplot2)
-```
-
-## Step 4: Annotating your chart
-
-As a refresher, here is the chart you created before:
-```{r faceting a plot}
-ggplot(data = hotel_bookings) +
-  geom_bar(mapping = aes(x = market_segment)) +
-  facet_wrap(~hotel)
-```
-
-The first step will be adding a title; that is often the first thing people will pay attention to when they encounter a data visualization for the first time. To add a title, you will add `labs()` at the end of your `ggplot()` command and then input a title there:
+Comparison of market segments by hotel type for hotel bookings
 
 ```{r faceting a plot with a title}
 ggplot(data = hotel_bookings) +
@@ -581,49 +214,16 @@ ggplot(data = hotel_bookings) +
   labs(title="Comparison of market segments by hotel type for hotel bookings")
 ```
 
+Determine the time period the data covers. 
 
-You also want to add another detail about what time period this data covers. To do this, you need to find out when the data is from. 
-
-You realize you can use the `min()` function on the year column in the data:
-
-```{r earliest year}
-min(hotel_bookings$arrival_date_year)
-```
- 
-And the `max()` function:
-```{r latest year}
-max(hotel_bookings$arrival_date_year)
-```
-
-But you will need to save them as variables in order to easily use them in your labeling; the following code chunk creates two of those variables: 
 ```{r latest date}
 mindate <- min(hotel_bookings$arrival_date_year)
 maxdate <- max(hotel_bookings$arrival_date_year)
 ```
 
-Now, you will add in a subtitle using `subtitle=` in the `labs()` function. Then, you can use the `paste0()` function to use your newly-created variables in your labels. This is really handy, because if the data gets updated and there is more recent data added, you don't have to change the code below because the variables are dynamic:
+City bar chart with timeframe
 
 ```{r city bar chart with timeframe}
-ggplot(data = hotel_bookings) +
-  geom_bar(mapping = aes(x = market_segment)) +
-  facet_wrap(~hotel) +
-  labs(title="Comparison of market segments by hotel type for hotel bookings",
-       subtitle=paste0("Data from: ", mindate, " to ", maxdate))
-```
-
-You decide to switch the `subtitle`  to a `caption` which will appear in the bottom right corner instead.
-
-```{r city bar chart with timeframe as caption}
-ggplot(data = hotel_bookings) +
-  geom_bar(mapping = aes(x = market_segment)) +
-  facet_wrap(~hotel) +
-  labs(title="Comparison of market segments by hotel type for hotel bookings",
-       caption=paste0("Data from: ", mindate, " to ", maxdate))
-```
-
-Now you want to clean up the x and y axis labels to make sure they are really clear. To do that, you can add to the `labs()` function and use `x=` and `y=`. Feel free to change the text of the label and play around with it:
-
-```{r city bar chart with x and y axis}
 ggplot(data = hotel_bookings) +
   geom_bar(mapping = aes(x = market_segment)) +
   facet_wrap(~hotel) +
@@ -633,27 +233,7 @@ ggplot(data = hotel_bookings) +
        y="Number of Bookings")
 ```
 
-## Step 5: Saving your chart
-
-The `ggsave()` function was used to save the last plot that was generated, so if you have run something after running the code chunk above, then run that code chunk again. 
-
-Then run the following code chunk to save that plot as a .png file named `city_payment_chart`, which makes it clear to your stakeholders what the .png file contains. Now you should be able to find this file in your 'Files' tab in the bottom right of your screen. Check it out!
-
-```{r save your plot}
-ggsave('hotel_booking_chart.png')
-```
-
-## Practice quiz
-What are the default dimensions that `ggsave()` saved your image as?
-
-A: 5x5
-B: 10x10
-C: 7x7
-D: 25x25
-
-Answer: C. The default dimensions  of this ggsave() image are 7x7. You can see these dimensions listed after you run the code chunk. 
-
-If you wanted to make your chart bigger and more rectangular to fit the slide show presentation, you could specify the height and width of your .png in the `ggsave()` command. Edit the code chunk below to create a 16x8 .png image: 
+Saving chart 
 
 ```{r save your plot}
 ggsave('hotel_booking_chart.png',
